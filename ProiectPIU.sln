@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transport", "Transport\Tran
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarieModele", "LibrarieModele\LibrarieModele.csproj", "{2ED04DFF-3DD5-406A-B104-4821CE79B8E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NivelStocareData", "NivelStocareData\NivelStocareData.csproj", "{C96AB919-327B-437C-A0BA-C4219BDB01D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2ED04DFF-3DD5-406A-B104-4821CE79B8E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ED04DFF-3DD5-406A-B104-4821CE79B8E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ED04DFF-3DD5-406A-B104-4821CE79B8E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C96AB919-327B-437C-A0BA-C4219BDB01D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C96AB919-327B-437C-A0BA-C4219BDB01D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C96AB919-327B-437C-A0BA-C4219BDB01D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C96AB919-327B-437C-A0BA-C4219BDB01D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
