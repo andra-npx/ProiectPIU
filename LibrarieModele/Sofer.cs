@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic; // l-am adaugat ca sa pot folosi List
+﻿using System.Collections.Generic; 
 
-namespace Transport
+namespace LibrarieModele
 {
     public class Sofer
     {
@@ -8,7 +8,13 @@ namespace Transport
         public string Prenume { get; set; }
         public double KmParcursi { get; set; }
         public List<string> Trasee { get; set; }
-
+        public Sofer()
+        {
+            Nume = string.Empty;
+            Prenume=string.Empty;
+            KmParcursi = 0;
+            Trasee = new List<string>();
+        }
         public Sofer(string nume, string prenume)
         {
             Nume = nume;
@@ -16,7 +22,6 @@ namespace Transport
             KmParcursi = 0;
             Trasee = new List<string>();
         }
-
         public void AdaugaTraseu(string rute, double km, Masina masinaUtilizata)
         {
             if(km>0)

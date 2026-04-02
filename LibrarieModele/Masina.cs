@@ -1,4 +1,4 @@
-﻿namespace Transport
+﻿namespace LibrarieModele
 {
     public class Masina
     {
@@ -7,8 +7,14 @@
         public string Model { get; set; }
         public int An {  get; set; }
         public double Rulaj { get; set; }
-
-
+        public Masina()
+        {
+            NumarInmatriculare = string.Empty;
+            Marca = string.Empty;
+            Model = string.Empty;
+            An = 0;
+            Rulaj = 0;
+        }
         public Masina(string nr, string marca, string model, int an, double rulaj=0)
         {
             NumarInmatriculare = nr;

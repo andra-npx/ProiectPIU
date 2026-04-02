@@ -1,4 +1,6 @@
-﻿namespace Transport
+﻿using LibrarieModele;
+
+namespace Transport
 {
     class Program
     {
