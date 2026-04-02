@@ -27,6 +27,8 @@ namespace Transport
                 Console.WriteLine("FM. Cauta masina dupa numar de inmatriculare");
                 Console.WriteLine("NS. Cauta soferi dupa nume");
                 Console.WriteLine("M. Modifica date sofer (km parcursi si trasee)");
+                Console.WriteLine("AI. Adaugare interval de lucru");
+                Console.WriteLine("AL. Afisare lista jurnale");
                 Console.WriteLine("X. Inchidere program");
 
                 Console.WriteLine("Alegeti o optiune");
@@ -66,12 +68,26 @@ namespace Transport
 
                     case "AS":
                         List<Sofer> listaSoferi = adminTransport.GetListaSoferi();
-                        AfisareSoferi(listaSoferi);
+                        if (listaSoferi != null)
+                        {
+                            AfisareSoferi(listaSoferi);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nu exista date de afisat!");
+                        }
                         break;
 
                     case "AM":
                         List<Masina> listaMasini = adminTransport.GetListaMasini();
-                        AfisareMasini(listaMasini);
+                        if (listaMasini != null)
+                        {
+                            AfisareMasini(listaMasini);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nu exista date de afisat!");
+                        }
                         break;
 
                     case "SS":
@@ -83,6 +99,7 @@ namespace Transport
                         {
                             adminTransport.AddSofer(soferNou);
                             Console.WriteLine("Sofer salvat.");
+                            soferNou = null;
                         }
                         break;
 
@@ -96,6 +113,7 @@ namespace Transport
                         {
                             adminTransport.AddMasina(masinaNoua);
                             Console.WriteLine("Masina salvata.");
+                            masinaNoua = null;
                         }
                         break;
 
@@ -166,6 +184,14 @@ namespace Transport
                         }
                         break;
 
+                    case "AI":
+                        AdaugareInterval(adminTransport);
+                        break;
+
+                    case "AL":
+                        AfisareJurnale(adminTransport.GetListaJurnale());
+                        break;
+
                     case "X":
                         Console.WriteLine("Aplicatia va fi inchisa");
                         return;
@@ -199,7 +225,7 @@ namespace Transport
         public static void AfisareSoferi(List<Sofer> soferi)
         {
             Console.WriteLine("Soferii sunt:");
-            foreach(Sofer s in soferi)
+            foreach (Sofer s in soferi)
             {
                 AfisareSofer(s);
             }
@@ -210,11 +236,11 @@ namespace Transport
             Console.Write("Numar inmatriculare:");
             string nr = Console.ReadLine() ?? string.Empty;
             Console.Write("Marca:");
-            string marca = Console.ReadLine();
+            string marca = Console.ReadLine() ?? string.Empty;
             Console.Write("Model:");
             string model = Console.ReadLine() ?? string.Empty;
             int an;
-            while(true)
+            while (true)
             {
                 Console.Write("An fabricatie:");
                 if (int.TryParse(Console.ReadLine(), out an) && an >= 1900)
@@ -244,6 +270,25 @@ namespace Transport
             {
                 AfisareMasina(m);
             }
+        }
+
+        public static void AdaugareInterval(AdministrareTransportMemorie admin)
+        {
+            Console.Write("ID Sofer:");
+            int.TryParse(Console.ReadLine(), out int id);
+            Console.Write("Numar inmatriculare:");
+            string nr = Console.ReadLine() ?? string.Empty;
+            bool ok = admin.AddIntervalLucru(id, nr, DateTime.Now, DateTime.Now.AddHours(8));
+            if (ok)
+                Console.WriteLine("Interval adaugat in jurnal.");
+            else
+                Console.WriteLine("Eroare: Soferul sau Masina nu au fost gasite!");
+        }
+
+        public static void AfisareJurnale(List<IntervalLucru> lista)
+        {
+            foreach (var i in lista)
+                Console.WriteLine($"timp start: {i.Start}, sofer: {i.SoferActual.Nume}, masina: {i.MasinaActuala.NumarInmatriculare}");
         }
     }
 }

@@ -90,5 +90,31 @@ namespace NivelStocareData
             }
             return null; 
         }
+
+        public Sofer? GetSoferId(int id)
+        {
+            foreach(Sofer s in soferi)
+            {
+                if(s.IdSofer==id)
+                {
+                    return s;
+                }
+            }
+            return null;
+        }
+
+        public bool AddIntervalLucru(int idSofer, string nr, DateTime start, DateTime stop)
+        {
+            Sofer? s = GetSoferId(idSofer);
+            Masina? m = GetMasina(nr);
+
+            if(s!=null && m!=null)
+            {
+                IntervalLucru i = new IntervalLucru(s, m, start, stop);
+                AddIntervalLucru(i);
+                return true;
+            }
+            return false;
+        }
     }
 }
