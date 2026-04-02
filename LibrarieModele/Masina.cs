@@ -1,4 +1,6 @@
-﻿namespace LibrarieModele
+﻿using System;
+
+namespace LibrarieModele
 {
 
     public enum CuloareMasina
@@ -23,6 +25,7 @@
     }
     public class Masina
     {
+        private const char SEPARATOR_FISIER = ';';
         public int IdMasina { get; set; }
         public string NumarInmatriculare {  get; set; }
         public string Marca {  get; set; }
@@ -56,6 +59,26 @@
         public string Info()
         {
             return $"Id: {IdMasina}, Numar inmatriculare: {NumarInmatriculare}, Marca: {Marca}, Model: {Model}, An: {An}, Rulaj: {Rulaj}, Culoare: {Culoare}, Optiuni: {Optiuni}";
+        }
+
+
+        public Masina(string linieFisier)
+        {
+            var date = linieFisier.Split(SEPARATOR_FISIER);
+            IdMasina = Convert.ToInt32(date[0]);
+            NumarInmatriculare = date[1];
+            Marca = date[2];
+            Model = date[3];
+            An = Convert.ToInt32(date[4]);
+            Rulaj = Convert.ToDouble(date[5]);
+            Culoare = (CuloareMasina)Convert.ToInt32(date[6]);
+            Optiuni = (OptiuniMasina)Convert.ToInt32(date[7]);
+        }
+
+        public string ConversieLaSirPentruFisier()
+        {
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}",
+                SEPARATOR_FISIER, IdMasina, NumarInmatriculare, Marca, Model, An, Rulaj, (int)Culoare, (int)Optiuni);
         }
     }
 }

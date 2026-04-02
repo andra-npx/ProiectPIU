@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NivelStocareData
 {
-    public class AdministrareTransportMemorie
+    public class AdministrareTransportMemorie : IStocareData
     {
         private List<Sofer> soferi;
         private List<Masina> masini;
@@ -43,7 +43,7 @@ namespace NivelStocareData
             return new List<IntervalLucru>(jurnale);
         }
 
-        public Sofer? GetSofer(string nume, string prenume)
+        public Sofer GetSofer(string nume, string prenume)
         {
             foreach (Sofer s in soferi)
             {
@@ -54,7 +54,7 @@ namespace NivelStocareData
             }
             return null;
         }
-        public List<Sofer>? GetSoferi(string nume)
+        public List<Sofer> GetSoferi(string nume)
         {
             /*List<Sofer> rezultate = new List<Sofer>();
 
@@ -81,7 +81,7 @@ namespace NivelStocareData
             }
             return false;
         }
-        public Masina? GetMasina(string nr)
+        public Masina GetMasina(string nr)
         {
             /* foreach (Masina m in masini)
              { 
@@ -94,7 +94,7 @@ namespace NivelStocareData
             return masini.FirstOrDefault(m => m.NumarInmatriculare.ToUpper() == nr.ToUpper());
         }
 
-        public Sofer? GetSoferId(int id)
+        public Sofer GetSoferId(int id)
         {
             foreach(Sofer s in soferi)
             {
@@ -106,14 +106,16 @@ namespace NivelStocareData
             return null;
         }
 
-        public bool AddIntervalLucru(int idSofer, string nr, DateTime start, DateTime stop)
+        public bool AddIntervalLucru(int idSofer, string nr, DateTime start, DateTime stop, TipCursa t, StareInterval s)
         {
-            Sofer? s = GetSoferId(idSofer);
-            Masina? m = GetMasina(nr);
+            Sofer? soferGasit = soferi.FirstOrDefault(sf => sf.IdSofer == idSofer);
+            Masina? masinaGasita = masini.FirstOrDefault(m => m.NumarInmatriculare.Equals(nr, StringComparison.OrdinalIgnoreCase));
 
-            if(s!=null && m!=null)
+            if (soferGasit != null && masinaGasita != null)
             {
-                IntervalLucru i = new IntervalLucru(s, m, start, stop);
+                IntervalLucru i = new IntervalLucru(soferGasit, masinaGasita, start, stop);
+                i.Tip = t;   
+                i.Stare = s; 
                 AddIntervalLucru(i);
                 return true;
             }

@@ -1,4 +1,8 @@
-﻿namespace LibrarieModele
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LibrarieModele
 {
     [Flags]
     public enum CategoriiPermis
@@ -20,6 +24,8 @@
     }
     public class Sofer
     {
+        private const char SEPARATOR_PRINCIPAL_FISIER = ';';
+        private const char SEPARATOR_SECUNDAR_FISIER = ',';
         public int IdSofer { get; set; }
         public string Nume { get; set; }
         public string Prenume { get; set; }
@@ -70,6 +76,29 @@
             }
 
             return $"ID: {IdSofer}, Sofer: {Nume} {Prenume}, Km Parcursi: {KmParcursi}, Trasee: {ruteFormatate}, Categorie: {Categorii}, Nivel experienta: {Experienta}";
+        }
+
+
+        // Constructor pentru citirea din fisier
+        public Sofer(string linieFisier)
+        {
+            var dateFisier = linieFisier.Split(SEPARATOR_PRINCIPAL_FISIER);
+            IdSofer = Convert.ToInt32(dateFisier[0]);
+            Nume = dateFisier[1];
+            Prenume = dateFisier[2];
+            KmParcursi = Convert.ToDouble(dateFisier[3]);
+            Trasee = dateFisier[4].Split(new[] { SEPARATOR_SECUNDAR_FISIER }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            Categorii = (CategoriiPermis)Convert.ToInt32(dateFisier[5]);
+            Experienta = (NivelExperienta)Convert.ToInt32(dateFisier[6]);
+        }
+        public string ConversieLaSirPentruFisier()
+        {
+            string sTrasee = (Trasee != null && Trasee.Count > 0)
+                ? string.Join(SEPARATOR_SECUNDAR_FISIER.ToString(), Trasee)
+                : " ";
+
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}",
+                SEPARATOR_PRINCIPAL_FISIER, IdSofer, Nume, Prenume, KmParcursi, sTrasee, (int)Categorii, (int)Experienta);
         }
     }
 }

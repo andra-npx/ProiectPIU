@@ -9,7 +9,7 @@ namespace Transport
     {
         public static void Main()
         {
-            AdministrareTransportMemorie adminTransport = new AdministrareTransportMemorie();
+            IStocareData adminTransport = new AdministrareTransportFisierText("in.txt");
             Sofer? soferNou = null;
             Masina? masinaNoua = null;
             string optiune;
@@ -173,13 +173,20 @@ namespace Transport
                             double.TryParse(Console.ReadLine(), out double kmNoi);
                             Console.Write("Nr. inmatriculare masina utilizata:");
                             string nrM = Console.ReadLine() ?? string.Empty;
-                            Masina? mUtilizata = adminTransport.GetMasina(nrM) ?? new Masina();
-                            bool succes = adminTransport.ModificaDateSofer(idCautat, rutaNoua, kmNoi, mUtilizata);
-
-                            if (succes)
-                                Console.WriteLine("Datele soferului (km si trasee) au fost actualizate!");
+                            Masina? mUtilizata = adminTransport.GetMasina(nrM);
+                            if (mUtilizata == null)
+                            {
+                                Console.WriteLine("Eroare: Masina nu a fost gasita in baza de date!");
+                            }
                             else
-                                Console.WriteLine("Soferul cu ID-ul specificat nu a fost gasit.");
+                            {
+                                bool succes = adminTransport.ModificaDateSofer(idCautat, rutaNoua, kmNoi, mUtilizata);
+
+                                if (succes)
+                                    Console.WriteLine("Datele soferului (km si trasee) au fost actualizate!");
+                                else
+                                    Console.WriteLine("Soferul cu ID-ul specificat nu a fost gasit.");
+                            }
                         }
                         break;
 
@@ -308,7 +315,7 @@ namespace Transport
             }
         }
 
-        public static void AdaugareInterval(AdministrareTransportMemorie admin)
+        public static void AdaugareInterval(IStocareData admin)
         {
             Console.Write("ID Sofer:");
             int.TryParse(Console.ReadLine(), out int id);
@@ -322,7 +329,7 @@ namespace Transport
             Console.WriteLine("Stare (0-Inexistent, 1-Programat, 2-InDesfasurare, 3-Finalizat, 4-Anulat):");
             int.TryParse(Console.ReadLine(), out int s);
 
-            bool ok = admin.AddIntervalLucru(id, nr, DateTime.Now, DateTime.Now.AddHours(8));
+            bool ok = admin.AddIntervalLucru(id, nr, DateTime.Now, DateTime.Now.AddHours(8), (TipCursa)t, (StareInterval)s);
             if (ok)
             {
                 var lista = admin.GetListaJurnale();

@@ -1,4 +1,6 @@
-﻿namespace LibrarieModele
+﻿using System;
+
+namespace LibrarieModele
 {
     public enum TipCursa
     {
