@@ -1,6 +1,7 @@
 ﻿using LibrarieModele;
 using NivelStocareData;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Transport
 {
@@ -99,7 +100,6 @@ namespace Transport
                         {
                             adminTransport.AddSofer(soferNou);
                             Console.WriteLine("Sofer salvat.");
-                            soferNou = null;
                         }
                         break;
 
@@ -113,7 +113,6 @@ namespace Transport
                         {
                             adminTransport.AddMasina(masinaNoua);
                             Console.WriteLine("Masina salvata.");
-                            masinaNoua = null;
                         }
                         break;
 
@@ -213,7 +212,20 @@ namespace Transport
             Console.WriteLine("Introduceti prenumele");
             string prenume = Console.ReadLine() ?? string.Empty;
 
+            Console.WriteLine("Alegeti optiunile (adunati valorile pentru optiuni multiple):");
+            Console.WriteLine("Categorii permis (adunati: 1-B, 2-C, 4-D, 8-E, 16-Toate):");
+            Console.Write("Suma optiunilor: ");
+            int.TryParse(Console.ReadLine(), out int optiuniAlese);
+            CategoriiPermis optiuniCategorii = (CategoriiPermis)optiuniAlese;
+
+            Console.WriteLine("Nivel experienta (0-Fara, 1-Incepator, 2-Mediu, 3-Avansat, 4-Expert):");
+            int.TryParse(Console.ReadLine(), out int optiuneNivel);
+            NivelExperienta nivelAles = (NivelExperienta)optiuneNivel;
+
             Sofer sofer = new Sofer(0, nume, prenume);
+            sofer.Categorii = optiuniCategorii;
+            sofer.Experienta = nivelAles;
+
             return sofer;
         }
 
@@ -235,10 +247,13 @@ namespace Transport
         {
             Console.Write("Numar inmatriculare:");
             string nr = Console.ReadLine() ?? string.Empty;
+
             Console.Write("Marca:");
             string marca = Console.ReadLine() ?? string.Empty;
+
             Console.Write("Model:");
             string model = Console.ReadLine() ?? string.Empty;
+
             int an;
             while (true)
             {
@@ -247,6 +262,7 @@ namespace Transport
                     break;
                 Console.Write("Introduceti un an valid:");
             }
+
             double rulaj;
             while (true)
             {
@@ -255,7 +271,27 @@ namespace Transport
                     break;
                 Console.Write("Introduceti un numar pozitiv pentru rulaj:");
             }
-            return new Masina(0, nr, marca, model, an, rulaj);
+
+            Console.WriteLine("Alegeti culoarea:");
+            Console.WriteLine("1 - Rosu, 2 - Alb, 3 - Negru, 4 - Albastru, 5 - Gri");
+            int.TryParse(Console.ReadLine(), out int optiuneCuloare);
+            CuloareMasina culoareAleasa = (CuloareMasina)optiuneCuloare;
+
+            Console.WriteLine("Alegeti optiunile (adunati valorile pentru optiuni multiple):");
+            Console.WriteLine("1 - AerConditionat");
+            Console.WriteLine("2 - Navigatie");
+            Console.WriteLine("4 - CutieAutomata");
+            Console.WriteLine("8 - ScauneIncalzite");
+            Console.WriteLine("16 - SenzoriParcare");
+            Console.Write("Suma optiunilor: ");
+            int.TryParse(Console.ReadLine(), out int optiuniAlese);
+            OptiuniMasina optiuniMasina = (OptiuniMasina)optiuniAlese;
+
+            Masina m = new Masina(0, nr, marca, model, an, rulaj);
+            m.Culoare = culoareAleasa;
+            m.Optiuni = optiuniMasina;
+
+            return m;
         }
 
         public static void AfisareMasina(Masina m)
@@ -276,11 +312,25 @@ namespace Transport
         {
             Console.Write("ID Sofer:");
             int.TryParse(Console.ReadLine(), out int id);
+
             Console.Write("Numar inmatriculare:");
             string nr = Console.ReadLine() ?? string.Empty;
+
+            Console.WriteLine("Tip cursa (0-FaraCursa, 1-Locala, 2-Nationala, 3-Internationala, 4-Speciala):");
+            int.TryParse(Console.ReadLine(), out int t);
+
+            Console.WriteLine("Stare (0-Inexistent, 1-Programat, 2-InDesfasurare, 3-Finalizat, 4-Anulat):");
+            int.TryParse(Console.ReadLine(), out int s);
+
             bool ok = admin.AddIntervalLucru(id, nr, DateTime.Now, DateTime.Now.AddHours(8));
             if (ok)
+            {
+                var lista = admin.GetListaJurnale();
+                var ultimul = lista.Last();
+                ultimul.Tip = (TipCursa)t;
+                ultimul.Stare = (StareInterval)s;
                 Console.WriteLine("Interval adaugat in jurnal.");
+            }
             else
                 Console.WriteLine("Eroare: Soferul sau Masina nu au fost gasite!");
         }
@@ -288,7 +338,7 @@ namespace Transport
         public static void AfisareJurnale(List<IntervalLucru> lista)
         {
             foreach (var i in lista)
-                Console.WriteLine($"timp start: {i.Start}, sofer: {i.SoferActual.Nume}, masina: {i.MasinaActuala.NumarInmatriculare}");
+                Console.WriteLine($"Timp start: {i.Start}, Sofer: {i.SoferActual.Nume} {i.SoferActual.Prenume}, Masina: {i.MasinaActuala.NumarInmatriculare}, Tip: {i.Tip}, Stare: {i.Stare}");
         }
     }
 }

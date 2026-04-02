@@ -1,5 +1,6 @@
 ﻿using LibrarieModele;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NivelStocareData
 {
@@ -55,7 +56,7 @@ namespace NivelStocareData
         }
         public List<Sofer>? GetSoferi(string nume)
         {
-            List<Sofer> rezultate = new List<Sofer>();
+            /*List<Sofer> rezultate = new List<Sofer>();
 
             foreach (Sofer s in soferi)
             {
@@ -64,7 +65,8 @@ namespace NivelStocareData
                     rezultate.Add(s);
                 }
             }
-            return rezultate;
+            return rezultate;*/
+            return soferi.Where(s => s.Nume.Equals(nume, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         public bool ModificaDateSofer(int id, string ruta, double km, Masina masina)
@@ -81,14 +83,15 @@ namespace NivelStocareData
         }
         public Masina? GetMasina(string nr)
         {
-            foreach (Masina m in masini)
-            { 
-                if (m.NumarInmatriculare.ToUpper() == nr.ToUpper())
-                {
-                    return m; 
-                }
-            }
-            return null; 
+            /* foreach (Masina m in masini)
+             { 
+                 if (m.NumarInmatriculare.ToUpper() == nr.ToUpper())
+                 {
+                     return m; 
+                 }
+             }
+             return null; */
+            return masini.FirstOrDefault(m => m.NumarInmatriculare.ToUpper() == nr.ToUpper());
         }
 
         public Sofer? GetSoferId(int id)
