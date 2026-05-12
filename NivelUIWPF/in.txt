@@ -1,0 +1,8 @@
+﻿S;1;pintilescu;andra;0; ;1;3
+S;2;andone;mihaela;0; ;1;2
+S;3;andone;andra;450; ,suceava-bucuresti;16;4
+S;4;gafencu;filip;0; ;2;1
+M;1;sv96axp;skoda;octavia;2006;282000;5;3
+M;2;sv16lrf;volvo;xc60;2010;220300;3;31
+M;3;sv19toy;toyota;auris;2007;175000;5;9
+J;3;sv96axp;2026-04-03T12:57:19.1175392+03:00;2026-04-03T20:57:19.1227588+03:00;3;2

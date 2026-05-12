@@ -1,0 +1,164 @@
+﻿<Window x:Class="NivelUIWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:NivelUIWPF"
+        Title="Sistem Gestiune Transport Pro" Height="850" Width="1150" Background="#F4F7F9">
+
+    <Window.Resources>
+        <local:StringListConverter x:Key="StringListConverter"/>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <TabControl>
+            <TabItem Header="🚚 Șoferi">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="380"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Margin="10">
+                        <StackPanel>
+                            <TextBlock Text="Adăugare / Modificare Șofer" FontSize="18" Margin="0,0,0,10"/>
+                            <Label Content="Nume:"/>
+                            <TextBox Text="{Binding SoferCurent.Nume, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Prenume:"/>
+                            <TextBox Text="{Binding SoferCurent.Prenume, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <GroupBox Header="Nivel Experiență">
+                                <StackPanel>
+                                    <RadioButton Content="Fără Experiență" IsChecked="{Binding ExpFara}"/>
+                                    <RadioButton Content="Începător" IsChecked="{Binding ExpIncepator}"/>
+                                    <RadioButton Content="Mediu" IsChecked="{Binding ExpMediu}"/>
+                                    <RadioButton Content="Avansat" IsChecked="{Binding ExpAvansat}"/>
+                                    <RadioButton Content="Expert" IsChecked="{Binding ExpExpert}"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="Categorii">
+                                <WrapPanel>
+                                    <CheckBox Content="B " IsChecked="{Binding CatB}" Margin="5"/>
+                                    <CheckBox Content="C " IsChecked="{Binding CatC}" Margin="5"/>
+                                    <CheckBox Content="D " IsChecked="{Binding CatD}" Margin="5"/>
+                                    <CheckBox Content="E " IsChecked="{Binding CatE}" Margin="5"/>
+                                    <CheckBox Content="Toate" IsChecked="{Binding CatToate}" Margin="5"/>
+                                </WrapPanel>
+                            </GroupBox>
+
+                            <Button Content="Salvează Șofer Nou (SS)" Click="BtnSalveazaSofer_Click" Background="#3498DB" Foreground="White" Height="30" Margin="0,10"/>
+
+                            <GroupBox Header="Actualizare Traseu (M) - Selectați din tabel">
+                                <StackPanel>
+                                    <Label Content="Ruta Nouă:"/>
+                                    <TextBox x:Name="txtRutaNoua"/>
+                                    <Label Content="KM Adăugați:"/>
+                                    <TextBox x:Name="txtKmNoi"/>
+                                    <Label Content="Mașină utilizată:"/>
+                                    <ComboBox x:Name="cmbMasinaTraseu" ItemsSource="{Binding ListaMasini}" DisplayMemberPath="NumarInmatriculare"/>
+                                    <Button Content="Actualizează Date (M)" Click="BtnModificaSofer_Click" Background="#27AE60" Foreground="White" Margin="0,10"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Grid Grid.Column="1" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="txtCautSofer" TextChanged="TxtCautSofer_TextChanged" Margin="0,0,0,10" ToolTip="Căutare după nume/prenume"/>
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding ListaSoferiAfisata}" SelectedItem="{Binding SoferSelectatGrid}" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nume" Binding="{Binding Nume}" Width="100"/>
+                                <DataGridTextColumn Header="Prenume" Binding="{Binding Prenume}" Width="100"/>
+                                <DataGridTextColumn Header="KM" Binding="{Binding KmParcursi}" Width="60"/>
+                                <DataGridTextColumn Header="Experiență" Binding="{Binding Experienta}" Width="100"/>
+                                <DataGridTextColumn Header="Trasee" Binding="{Binding Trasee, Converter={StaticResource StringListConverter}}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="🚗 Mașini">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="350"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="10">
+                        <Label Content="Nr. Înmatriculare:"/>
+                        <TextBox Text="{Binding MasinaCurenta.NumarInmatriculare}"/>
+                        <Label Content="Marcă:"/>
+                        <TextBox Text="{Binding MasinaCurenta.Marca}"/>
+                        <Label Content="Model:"/>
+                        <TextBox Text="{Binding MasinaCurenta.Model}"/>
+                        <Label Content="An:"/>
+                        <TextBox Text="{Binding MasinaCurenta.An}"/>
+                        <Label Content="Rulaj:"/>
+                        <TextBox Text="{Binding MasinaCurenta.Rulaj}"/>
+                        <Label Content="Culoare:"/>
+                        <ComboBox ItemsSource="{Binding Culori}" SelectedItem="{Binding MasinaCurenta.Culoare}"/>
+                        <GroupBox Header="Opțiuni">
+                            <WrapPanel>
+                                <CheckBox Content="AC" IsChecked="{Binding OptAC}" Margin="5"/>
+                                <CheckBox Content="Navi" IsChecked="{Binding OptNavi}" Margin="5"/>
+                                <CheckBox Content="Automată" IsChecked="{Binding OptAuto}" Margin="5"/>
+                                <CheckBox Content="Încălzire" IsChecked="{Binding OptIncalzire}" Margin="5"/>
+                            </WrapPanel>
+                        </GroupBox>
+                        <Button Content="Salvează Mașină (SM)" Click="BtnSalveazaMasina_Click" Background="#E67E22" Foreground="White" Margin="0,10"/>
+                    </StackPanel>
+                    <Grid Grid.Column="1" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="txtCautMasina" TextChanged="TxtCautMasina_TextChanged" Margin="0,0,0,10" ToolTip="Căutare după număr înmatriculare"/>
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding ListaMasiniAfisata}" AutoGenerateColumns="True" IsReadOnly="True"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="📋 Jurnal">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Înregistrare Cursă Nouă (AI)">
+                        <UniformGrid Columns="2">
+                            <StackPanel Margin="5">
+                                <Label Content="Șofer:"/>
+                                <ComboBox ItemsSource="{Binding ListaSoferi}" DisplayMemberPath="Nume" SelectedItem="{Binding JurnalSofer}"/>
+                                <Label Content="Tip Cursa:"/>
+                                <ComboBox ItemsSource="{Binding TipuriCursa}" SelectedItem="{Binding JurnalTip}"/>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <Label Content="Mașină:"/>
+                                <ComboBox ItemsSource="{Binding ListaMasini}" DisplayMemberPath="NumarInmatriculare" SelectedItem="{Binding JurnalMasina}"/>
+                                <Label Content="Stare:"/>
+                                <ComboBox ItemsSource="{Binding StariCursa}" SelectedItem="{Binding JurnalStare}"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </GroupBox>
+                    <Button Content="Adaugă în Jurnal (AI)" Click="BtnAdaugaJurnal_Click" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Width="150" Height="30" Background="#8E44AD" Foreground="White"/>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding ListaJurnale}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Șofer" Binding="{Binding SoferActual.Nume}" Width="*"/>
+                            <DataGridTextColumn Header="Mașină" Binding="{Binding MasinaActuala.NumarInmatriculare}" Width="*"/>
+                            <DataGridTextColumn Header="Start" Binding="{Binding Start}" Width="*"/>
+                            <DataGridTextColumn Header="Tip" Binding="{Binding Tip}" Width="100"/>
+                            <DataGridTextColumn Header="Stare" Binding="{Binding Stare}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

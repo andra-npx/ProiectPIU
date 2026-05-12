@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace LibrarieModele
 {
-
     public enum CuloareMasina
     {
         Inexistenta = 0,
@@ -23,17 +24,78 @@ namespace LibrarieModele
         ScauneIncalzite = 8,
         SenzoriParcare = 16
     }
-    public class Masina
+
+    public class Masina : INotifyPropertyChanged
     {
+        // Evenimentul necesar pentru notificarea UI-ului (Lab 10)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Metodă pentru invocarea evenimentului (Lab 10)
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
         private const char SEPARATOR_FISIER = ';';
-        public int IdMasina { get; set; }
-        public string NumarInmatriculare {  get; set; }
-        public string Marca {  get; set; }
-        public string Model { get; set; }
-        public int An {  get; set; }
-        public double Rulaj { get; set; }
-        public CuloareMasina Culoare { get; set; }
-        public OptiuniMasina Optiuni { get; set; }
+
+        // Backing fields pentru proprietățile cu binding
+        private int idMasina;
+        private string numarInmatriculare;
+        private string marca;
+        private string model;
+        private int an;
+        private double rulaj;
+        private CuloareMasina culoare;
+        private OptiuniMasina optiuni;
+
+        public int IdMasina
+        {
+            get => idMasina;
+            set { idMasina = value; OnPropertyChanged(); }
+        }
+
+        public string NumarInmatriculare
+        {
+            get => numarInmatriculare;
+            set { numarInmatriculare = value; OnPropertyChanged(); }
+        }
+
+        public string Marca
+        {
+            get => marca;
+            set { marca = value; OnPropertyChanged(); }
+        }
+
+        public string Model
+        {
+            get => model;
+            set { model = value; OnPropertyChanged(); }
+        }
+
+        public int An
+        {
+            get => an;
+            set { an = value; OnPropertyChanged(); }
+        }
+
+        public double Rulaj
+        {
+            get => rulaj;
+            set { rulaj = value; OnPropertyChanged(); }
+        }
+
+        public CuloareMasina Culoare
+        {
+            get => culoare;
+            set { culoare = value; OnPropertyChanged(); }
+        }
+
+        public OptiuniMasina Optiuni
+        {
+            get => optiuni;
+            set { optiuni = value; OnPropertyChanged(); }
+        }
+
         public Masina()
         {
             NumarInmatriculare = string.Empty;
@@ -44,7 +106,8 @@ namespace LibrarieModele
             Culoare = CuloareMasina.Inexistenta;
             Optiuni = OptiuniMasina.Niciuna;
         }
-        public Masina(int id, string nr, string marca, string model, int an, double rulaj=0)
+
+        public Masina(int id, string nr, string marca, string model, int an, double rulaj = 0)
         {
             IdMasina = id;
             NumarInmatriculare = nr;
@@ -61,18 +124,20 @@ namespace LibrarieModele
             return $"Id: {IdMasina}, Numar inmatriculare: {NumarInmatriculare}, Marca: {Marca}, Model: {Model}, An: {An}, Rulaj: {Rulaj}, Culoare: {Culoare}, Optiuni: {Optiuni}";
         }
 
-
         public Masina(string linieFisier)
         {
             var date = linieFisier.Split(SEPARATOR_FISIER);
-            IdMasina = Convert.ToInt32(date[0]);
-            NumarInmatriculare = date[1];
-            Marca = date[2];
-            Model = date[3];
-            An = Convert.ToInt32(date[4]);
-            Rulaj = Convert.ToDouble(date[5]);
-            Culoare = (CuloareMasina)Convert.ToInt32(date[6]);
-            Optiuni = (OptiuniMasina)Convert.ToInt32(date[7]);
+            if (date.Length >= 8)
+            {
+                IdMasina = Convert.ToInt32(date[0]);
+                NumarInmatriculare = date[1];
+                Marca = date[2];
+                Model = date[3];
+                An = Convert.ToInt32(date[4]);
+                Rulaj = Convert.ToDouble(date[5]);
+                Culoare = (CuloareMasina)Convert.ToInt32(date[6]);
+                Optiuni = (OptiuniMasina)Convert.ToInt32(date[7]);
+            }
         }
 
         public string ConversieLaSirPentruFisier()
