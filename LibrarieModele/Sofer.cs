@@ -45,6 +45,7 @@ namespace LibrarieModele
         private double kmParcursi;
         private CategoriiPermis categorii;
         private NivelExperienta experienta;
+        private DateTime? dataAngajare;
 
         public int IdSofer
         {
@@ -84,6 +85,12 @@ namespace LibrarieModele
             set { experienta = value; OnPropertyChanged(); }
         }
 
+        public DateTime? DataAngajare
+        {
+            get => dataAngajare;
+            set { dataAngajare = value; OnPropertyChanged(); }
+        }
+
         //Proprietate pentru jurnal: afișează ID-ul + numele complet
         public string NumeCompletCuId => $"[#{IdSofer}] {Nume} {Prenume}";
 
@@ -115,7 +122,7 @@ namespace LibrarieModele
             if (km > 0)
             {
                 Trasee.Add(rute);
-                KmParcursi += km; // Aceasta va notifica automat UI-ul datorita blocului 'set'
+                KmParcursi += km; 
                 masinaUtilizata.Rulaj += km;
             }
         }

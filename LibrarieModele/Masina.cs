@@ -27,10 +27,8 @@ namespace LibrarieModele
 
     public class Masina : INotifyPropertyChanged
     {
-        // Evenimentul necesar pentru notificarea UI-ului (Lab 10)
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Metodă pentru invocarea evenimentului (Lab 10)
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -47,6 +45,7 @@ namespace LibrarieModele
         private double rulaj;
         private CuloareMasina culoare;
         private OptiuniMasina optiuni;
+        private DateTime? dataAchizitie;
 
         public int IdMasina
         {
@@ -94,6 +93,12 @@ namespace LibrarieModele
         {
             get => optiuni;
             set { optiuni = value; OnPropertyChanged(); }
+        }
+
+        public DateTime? DataAchizitie
+        {
+            get => dataAchizitie;
+            set { dataAchizitie = value; OnPropertyChanged(); }
         }
 
         public Masina()

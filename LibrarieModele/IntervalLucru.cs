@@ -24,16 +24,14 @@ namespace LibrarieModele
 
     public class IntervalLucru : INotifyPropertyChanged
     {
-        // Evenimentul necesar pentru notificarea UI-ului (Lab 10) [cite: 923]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Metodă pentru invocarea evenimentului (Lab 10) [cite: 950, 953]
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        // Backing fields pentru proprietățile cu binding [cite: 939]
+        // Backing fields pentru proprietățile cu binding
         private Sofer soferActual;
         private Masina masinaActuala;
         private DateTime start;
