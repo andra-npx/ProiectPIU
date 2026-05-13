@@ -48,6 +48,8 @@ namespace NivelUIWPF
         public bool OptNavi { get; set; }
         public bool OptAuto { get; set; }
         public bool OptIncalzire { get; set; }
+        public bool OptSenzori { get; set; }
+        public bool OptToate { get; set; }
 
         public MainWindow()
         {
@@ -75,6 +77,7 @@ namespace NivelUIWPF
             else if (ExpAvansat) SoferCurent.Experienta = NivelExperienta.Avansat;
             else if (ExpMediu) SoferCurent.Experienta = NivelExperienta.Mediu;
             else if (ExpIncepator) SoferCurent.Experienta = NivelExperienta.Incepator;
+            else SoferCurent.Experienta = NivelExperienta.FaraExperienta;
 
             SoferCurent.Categorii = CategoriiPermis.Niciuna;
             if (CatToate) SoferCurent.Categorii = CategoriiPermis.Toate;
@@ -87,8 +90,18 @@ namespace NivelUIWPF
             }
 
             admin.AddSofer(SoferCurent);
-            SoferCurent = new Sofer();
+
+            // Reset automat după salvare — nu mai e nevoie de buton separat
+            ResetFormularSofer();
             LoadData();
+        }
+
+        private void ResetFormularSofer()
+        {
+            SoferCurent = new Sofer();
+            ExpFara = true; ExpIncepator = false; ExpMediu = false; ExpAvansat = false; ExpExpert = false;
+            CatB = false; CatC = false; CatD = false; CatE = false; CatToate = false;
+            OnPropertyChanged("");
         }
 
         private void TxtCautSofer_TextChanged(object sender, TextChangedEventArgs e)
@@ -106,21 +119,48 @@ namespace NivelUIWPF
                 Masina m = cmbMasinaTraseu.SelectedItem as Masina;
                 if (m == null) m = ListaMasini.FirstOrDefault();
                 admin.ModificaDateSofer(SoferSelectatGrid.IdSofer, txtRutaNoua.Text, km, m);
+
+                // Reset campuri traseu dupa actualizare
+                txtRutaNoua.Text = string.Empty;
+                txtKmNoi.Text = string.Empty;
+                cmbMasinaTraseu.SelectedIndex = -1;
                 LoadData();
             }
+        }
+
+        // Când se bifeaza "Toate optiunile", se debifeaza toate celelalte individual
+        private void ChkOptToate_Checked(object sender, RoutedEventArgs e)
+        {
+            OptAC = false; OptNavi = false; OptAuto = false;
+            OptIncalzire = false; OptSenzori = false;
+            OnPropertyChanged("");
         }
 
         // --- GESTIUNE MAȘINI ---
         private void BtnSalveazaMasina_Click(object sender, RoutedEventArgs e)
         {
             MasinaCurenta.Optiuni = OptiuniMasina.Niciuna;
-            if (OptAC) MasinaCurenta.Optiuni |= OptiuniMasina.AerConditionat;
-            if (OptNavi) MasinaCurenta.Optiuni |= OptiuniMasina.Navigatie;
-            if (OptAuto) MasinaCurenta.Optiuni |= OptiuniMasina.CutieAutomata;
-            if (OptIncalzire) MasinaCurenta.Optiuni |= OptiuniMasina.ScauneIncalzite;
+            if (OptToate)
+            {
+                MasinaCurenta.Optiuni = OptiuniMasina.AerConditionat | OptiuniMasina.Navigatie
+                                      | OptiuniMasina.CutieAutomata | OptiuniMasina.ScauneIncalzite
+                                      | OptiuniMasina.SenzoriParcare;
+            }
+            else
+            {
+                if (OptAC) MasinaCurenta.Optiuni |= OptiuniMasina.AerConditionat;
+                if (OptNavi) MasinaCurenta.Optiuni |= OptiuniMasina.Navigatie;
+                if (OptAuto) MasinaCurenta.Optiuni |= OptiuniMasina.CutieAutomata;
+                if (OptIncalzire) MasinaCurenta.Optiuni |= OptiuniMasina.ScauneIncalzite;
+                if (OptSenzori) MasinaCurenta.Optiuni |= OptiuniMasina.SenzoriParcare;
+            }
 
             admin.AddMasina(MasinaCurenta);
+
+            // Reset automat dupa salvare
             MasinaCurenta = new Masina();
+            OptAC = false; OptNavi = false; OptAuto = false; OptIncalzire = false;
+            OptSenzori = false; OptToate = false;
             LoadData();
         }
 

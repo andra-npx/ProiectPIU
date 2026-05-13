@@ -28,10 +28,8 @@ namespace LibrarieModele
 
     public class Sofer : INotifyPropertyChanged
     {
-        // Evenimentul necesar pentru notificarea UI-ului (Lab 10)
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Metodă pentru invocarea evenimentului (Lab 10)
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -85,6 +83,11 @@ namespace LibrarieModele
             get => experienta;
             set { experienta = value; OnPropertyChanged(); }
         }
+
+        //Proprietate pentru jurnal: afișează ID-ul + numele complet
+        public string NumeCompletCuId => $"[#{IdSofer}] {Nume} {Prenume}";
+
+        public string NumeComplet => $"{Nume} {Prenume}";
 
         public Sofer()
         {
